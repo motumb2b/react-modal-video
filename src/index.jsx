@@ -42,7 +42,7 @@ export default class ModalVideo extends React.Component {
   }
 
   componentDidUpdate () {
-    if (this.state.isOpen && this.modal) {
+    if (this.props.isOpen && this.modal) {
       this.modal.focus();
     }
   }
@@ -71,9 +71,15 @@ export default class ModalVideo extends React.Component {
     return url.substr(0, url.length - 1)
   }
 
-  getYoutubeUrl(youtube, videoId) {
+  getYoutubeUrl(youtube, videoId, nocookies) {
     const query = this.getQueryString(youtube)
-    return '//www.youtube.com/embed/' + videoId + '?' + query
+    let url = '';
+    if (nocookies) {
+      return 'http://www.youtube-nocookie.com/embed/' + videoId + '?' + query 
+    } else {
+      return 'http://www.youtube.com/embed/' + videoId + '?' + query
+    }
+    return url;
   }
 
   getVimeoUrl(vimeo, videoId) {
@@ -86,9 +92,9 @@ export default class ModalVideo extends React.Component {
     return '//player.youku.com/embed/' + videoId + '?' + query
   }
 
-  getVideoUrl(opt, videoId) {
+  getVideoUrl(opt, videoId, nocookies) {
     if (opt.channel === 'youtube') {
-      return this.getYoutubeUrl(opt.youtube, videoId)
+      return this.getYoutubeUrl(opt.youtube, videoId, nocookies)
     } else if (opt.channel === 'vimeo') {
       return this.getVimeoUrl(opt.vimeo, videoId)
     } else if (opt.channel === 'youku') {
@@ -115,7 +121,7 @@ export default class ModalVideo extends React.Component {
         timeout={this.props.animationSpeed}
       >
         {() => {
-          if (!this.state.isOpen) {
+          if (!this.props.isOpen) {
             return null;
           }
 
@@ -126,7 +132,7 @@ export default class ModalVideo extends React.Component {
                 <div className={this.props.classNames.modalVideoInner}>
                   <div className={this.props.classNames.modalVideoIframeWrap} style={style}>
                     <button className={this.props.classNames.modalVideoCloseBtn} aria-label={this.props.aria.dismissBtnMessage} ref={node => { this.modalbtn = node; }} onKeyDown={this.updateFocus} />
-                    <iframe width='460' height='230' src={this.getVideoUrl(this.props, this.props.videoId)} frameBorder='0' allowFullScreen={this.props.allowFullScreen} tabIndex='-1' />
+                    <iframe width='460' height='230' src={this.getVideoUrl(this.props, this.props.videoId, this.props.nocookies)} frameBorder='0' allowFullScreen={this.props.allowFullScreen} tabIndex='-1' />
                   </div>
                 </div>
               </div>

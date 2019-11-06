@@ -14,7 +14,8 @@ class App extends React.Component {
   }
 
   openModal () {
-    this.setState({isOpen: true})
+    this.setState({isOpen: true}, () => {
+    })
   }
 
   render () {

@@ -94,14 +94,9 @@ var ModalVideo = function (_React$Component) {
       document.removeEventListener('keydown', this.keydownHandler.bind(this));
     }
   }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState({ isOpen: nextProps.isOpen });
-    }
-  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
-      if (this.state.isOpen && this.modal) {
+      if (this.props.isOpen && this.modal) {
         this.modal.focus();
       }
     }
@@ -133,9 +128,15 @@ var ModalVideo = function (_React$Component) {
     }
   }, {
     key: 'getYoutubeUrl',
-    value: function getYoutubeUrl(youtube, videoId) {
+    value: function getYoutubeUrl(youtube, videoId, nocookies) {
       var query = this.getQueryString(youtube);
-      return '//www.youtube.com/embed/' + videoId + '?' + query;
+      var url = '';
+      if (nocookies) {
+        return 'http://www.youtube-nocookie.com/embed/' + videoId + '?' + query;
+      } else {
+        return 'http://www.youtube.com/embed/' + videoId + '?' + query;
+      }
+      return url;
     }
   }, {
     key: 'getVimeoUrl',
@@ -151,9 +152,9 @@ var ModalVideo = function (_React$Component) {
     }
   }, {
     key: 'getVideoUrl',
-    value: function getVideoUrl(opt, videoId) {
+    value: function getVideoUrl(opt, videoId, nocookies) {
       if (opt.channel === 'youtube') {
-        return this.getYoutubeUrl(opt.youtube, videoId);
+        return this.getYoutubeUrl(opt.youtube, videoId, nocookies);
       } else if (opt.channel === 'vimeo') {
         return this.getVimeoUrl(opt.vimeo, videoId);
       } else if (opt.channel === 'youku') {
@@ -182,7 +183,7 @@ var ModalVideo = function (_React$Component) {
         classNames: this.props.classNames.modalVideoEffect,
         timeout: this.props.animationSpeed
       }, function () {
-        if (!_this2.state.isOpen) {
+        if (!_this2.props.isOpen) {
           return null;
         }
 
@@ -191,8 +192,13 @@ var ModalVideo = function (_React$Component) {
             _this2.modal = node;
           }, onKeyDown: _this2.updateFocus }, _react2.default.createElement('div', { className: _this2.props.classNames.modalVideoBody }, _react2.default.createElement('div', { className: _this2.props.classNames.modalVideoInner }, _react2.default.createElement('div', { className: _this2.props.classNames.modalVideoIframeWrap, style: style }, _react2.default.createElement('button', { className: _this2.props.classNames.modalVideoCloseBtn, 'aria-label': _this2.props.aria.dismissBtnMessage, ref: function ref(node) {
             _this2.modalbtn = node;
-          }, onKeyDown: _this2.updateFocus }), _react2.default.createElement('iframe', { width: '460', height: '230', src: _this2.getVideoUrl(_this2.props, _this2.props.videoId), frameBorder: '0', allowFullScreen: _this2.props.allowFullScreen, tabIndex: '-1' })))));
+          }, onKeyDown: _this2.updateFocus }), _react2.default.createElement('iframe', { width: '460', height: '230', src: _this2.getVideoUrl(_this2.props, _this2.props.videoId, _this2.props.nocookies), frameBorder: '0', allowFullScreen: _this2.props.allowFullScreen, tabIndex: '-1' })))));
       });
+    }
+  }], [{
+    key: 'getDerivedStateFromProps',
+    value: function getDerivedStateFromProps(props) {
+      return { isOpen: props.isOpen };
     }
   }]);
 
@@ -19969,7 +19975,7 @@ var App = function (_React$Component) {
   _createClass(App, [{
     key: 'openModal',
     value: function openModal() {
-      this.setState({ isOpen: true });
+      this.setState({ isOpen: true }, function () {});
     }
   }, {
     key: 'render',
