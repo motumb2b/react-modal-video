@@ -13,6 +13,11 @@ class App extends React.Component {
     this.openModal = this.openModal.bind(this)
   }
 
+  componentDidMount() {
+    console.log('mounted');
+    console.log(window.location.href)
+  }
+
   openModal () {
     this.setState({isOpen: true}, () => {
     })
@@ -21,7 +26,7 @@ class App extends React.Component {
   render () {
     return (
       <div>
-        <ModalVideo channel='youtube' isOpen={this.state.isOpen} videoId='L61p2uyiMSo' onClose={() => this.setState({isOpen: false})} />
+        <ModalVideo channel='youtube' nocookies isOpen={this.state.isOpen} videoId='L61p2uyiMSo' origin={window.location.href} onClose={() => this.setState({isOpen: false})} />
         <button onClick={this.openModal}>Open youtube</button>
 
         <ModalVideo

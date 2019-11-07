@@ -87,6 +87,7 @@ var ModalVideo = function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       document.addEventListener('keydown', this.keydownHandler.bind(this));
+      console.log('props', this.props);
     }
   }, {
     key: 'componentWillUnmount',
@@ -129,12 +130,14 @@ var ModalVideo = function (_React$Component) {
   }, {
     key: 'getYoutubeUrl',
     value: function getYoutubeUrl(youtube, videoId, nocookies) {
+      console.log('youtube', youtube);
       var query = this.getQueryString(youtube);
+      console.log('query', query);
       var url = '';
       if (nocookies) {
-        return 'http://www.youtube-nocookie.com/embed/' + videoId + '?' + query;
+        return '//www.youtube-nocookie.com/embed/' + videoId + '?' + query;
       } else {
-        return 'http://www.youtube.com/embed/' + videoId + '?' + query;
+        return '//www.youtube.com/embed/' + videoId + '?' + query;
       }
       return url;
     }
@@ -153,7 +156,12 @@ var ModalVideo = function (_React$Component) {
   }, {
     key: 'getVideoUrl',
     value: function getVideoUrl(opt, videoId, nocookies) {
+      console.log('opt', opt);
       if (opt.channel === 'youtube') {
+        if (opt.origin) {
+          opt.youtube.origin = opt.origin;
+          opt.youtube.enablejsapi = 1;
+        }
         return this.getYoutubeUrl(opt.youtube, videoId, nocookies);
       } else if (opt.channel === 'vimeo') {
         return this.getVimeoUrl(opt.vimeo, videoId);
@@ -19973,6 +19981,12 @@ var App = function (_React$Component) {
   }
 
   _createClass(App, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      console.log('mounted');
+      console.log(window.location.href);
+    }
+  }, {
     key: 'openModal',
     value: function openModal() {
       this.setState({ isOpen: true }, function () {});
@@ -19985,7 +19999,7 @@ var App = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_index2.default, { channel: 'youtube', isOpen: this.state.isOpen, videoId: 'L61p2uyiMSo', onClose: function onClose() {
+        _react2.default.createElement(_index2.default, { channel: 'youtube', nocookies: true, isOpen: this.state.isOpen, videoId: 'L61p2uyiMSo', origin: window.location.href, onClose: function onClose() {
             return _this2.setState({ isOpen: false });
           } }),
         _react2.default.createElement(

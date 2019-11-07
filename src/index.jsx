@@ -31,6 +31,7 @@ export default class ModalVideo extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.keydownHandler.bind(this));
+    console.log('props', this.props)
   }
 
   componentWillUnmount() {
@@ -72,12 +73,14 @@ export default class ModalVideo extends React.Component {
   }
 
   getYoutubeUrl(youtube, videoId, nocookies) {
+    console.log('youtube', youtube)
     const query = this.getQueryString(youtube)
+    console.log('query', query)
     let url = '';
     if (nocookies) {
-      return 'http://www.youtube-nocookie.com/embed/' + videoId + '?' + query 
+      return '//www.youtube-nocookie.com/embed/' + videoId + '?' + query
     } else {
-      return 'http://www.youtube.com/embed/' + videoId + '?' + query
+      return '//www.youtube.com/embed/' + videoId + '?' + query
     }
     return url;
   }
@@ -93,7 +96,12 @@ export default class ModalVideo extends React.Component {
   }
 
   getVideoUrl(opt, videoId, nocookies) {
+    console.log('opt', opt)
     if (opt.channel === 'youtube') {
+      if (opt.origin) {
+        opt.youtube.origin = opt.origin
+        opt.youtube.enablejsapi = 1
+      }
       return this.getYoutubeUrl(opt.youtube, videoId, nocookies)
     } else if (opt.channel === 'vimeo') {
       return this.getVimeoUrl(opt.vimeo, videoId)
